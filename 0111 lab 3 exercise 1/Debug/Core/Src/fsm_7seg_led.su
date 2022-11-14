@@ -1,6 +1,7 @@
-fsm_7seg_led.c:16:6:OffAllLed	8	static
-fsm_7seg_led.c:24:6:modeLedRun	8	static
-fsm_7seg_led.c:30:6:modeLed2Run	8	static
-fsm_7seg_led.c:36:6:setValueLedRun	8	static
-fsm_7seg_led.c:42:6:setValue2LedRun	8	static
-fsm_7seg_led.c:51:6:fsm_7seg_led	8	static
+fsm_7seg_led.c:15:6:OffAllLed	8	static
+fsm_7seg_led.c:23:6:modeLedRun	8	static
+fsm_7seg_led.c:29:6:modeLed2Run	8	static
+fsm_7seg_led.c:35:6:setValueLedRun	8	static
+fsm_7seg_led.c:41:6:setValue2LedRun	8	static
+fsm_7seg_led.c:47:6:fsm_7seg_led	8	static
+fsm_7seg_led.c:94:6:updateBufferFor7SEG	4	static

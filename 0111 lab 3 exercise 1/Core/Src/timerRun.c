@@ -7,7 +7,7 @@
 
 
 #include "timerRun.h"
-#define NUM_OF_TIMER	5
+#define NUM_OF_TIMER	4
 #define TICK	10//10ms interrupt
 int32_t count[NUM_OF_TIMER];
 //int32_t count1=0/TICK;
