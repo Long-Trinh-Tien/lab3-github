@@ -6,6 +6,7 @@
  */
 
 #include "fsm_mode_change.h"
+#include "fsm_traffic_light.h"
 //blink 2Hz
 void blink_Red2Hz()
 {
@@ -44,10 +45,10 @@ void updateBufferGreen()
 	bufferFor7SEG[1]=bufferForTrafficLight[2]%10;
 }
 
-//traffic light run
-void trafficLightRun()
+void modeNum(int mode)
 {
-
+	bufferFor7SEG[2]=0;
+	bufferFor7SEG[3]=mode;
 }
 
 //vertical is main road, we works on main road
@@ -60,11 +61,12 @@ void fsm_mode_change()
 		{
 			mode=RED_MODE;
 			setTimer(500,0);//2Hz
+			offAllTrafficLight();
 		}
-		fsm_traffic_light();
+//			fsm_traffic_light();
 		break;
 	case RED_MODE:
-
+		modeNum(2);
 		//blink 2Hz
 		if(isTimerDone(1))
 		{
@@ -75,24 +77,27 @@ void fsm_mode_change()
 		//update value
 		if(isButtonPressed(TIME_BUTTON))
 		{
-			bufferForTrafficLight[0]=((bufferForTrafficLight[0]+1)%99)+1;//1-99
+			bufferForTrafficLight[0]=(bufferForTrafficLight[0]%99)+1;//1-99
 		}
-		updateBufferRed();
+			updateBufferRed();
 
 		//change mode
 		if(isButtonPressed(MODE_BUTTON))
 		{
 			mode=YELLOW_MODE;
 			setTimer(500,0);//2Hz
+			offAllTrafficLight();
 		}
 
 		//return normal
 		if(isButtonPressed(SET_VALUE_BUTTON))
 		{
 			mode=NORMAL_MODE;
+			offAllTrafficLight();
 		}
 		break;
 	case YELLOW_MODE:
+		modeNum(3);
 		//blink 2Hz
 		if(isTimerDone(1))
 		{
@@ -103,24 +108,27 @@ void fsm_mode_change()
 		//update value
 		if(isButtonPressed(TIME_BUTTON))
 		{
-			bufferForTrafficLight[1]=((bufferForTrafficLight[1]+1)%99)+1;//1-99
+			bufferForTrafficLight[1]=(bufferForTrafficLight[1]%99)+1;//1-99
 		}
-		updateBufferYellow();
+			updateBufferYellow();
 
 		//change mode
 		if(isButtonPressed(MODE_BUTTON))
 		{
 			mode=GREEN_MODE;
 			setTimer(500,0);//2Hz
+			offAllTrafficLight();
 		}
 
 		//return normal
 		if(isButtonPressed(SET_VALUE_BUTTON))
 		{
 			mode=NORMAL_MODE;
+			offAllTrafficLight();
 		}
 		break;
 	case GREEN_MODE:
+		modeNum(4);
 		//blink 2Hz
 		if(isTimerDone(1))
 		{
@@ -131,25 +139,26 @@ void fsm_mode_change()
 		//update value
 		if(isButtonPressed(TIME_BUTTON))
 		{
-			bufferForTrafficLight[2]=((bufferForTrafficLight[2]+1)%99)+1;//1-99
+			bufferForTrafficLight[2]=(bufferForTrafficLight[2]%99)+1;//1-99
 		}
-		updateBufferGreen();
+			updateBufferGreen();
 
 		//change mode
 		if(isButtonPressed(MODE_BUTTON))
 		{
 			mode=NORMAL_MODE;
+			offAllTrafficLight();
 		}
 
 		//return normal
 		if(isButtonPressed(SET_VALUE_BUTTON))
 		{
 			mode=NORMAL_MODE;
+			offAllTrafficLight();
 		}
 		break;
 	default:
 		break;
 	}
 }
-
 
