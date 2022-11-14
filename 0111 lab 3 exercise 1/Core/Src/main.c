@@ -94,10 +94,11 @@ int main(void)
   /* USER CODE BEGIN 2 */
   HAL_TIM_Base_Start_IT(&htim2);
   startAllButton();
+  startAllTimer();
   OffAllLed();
   offAllTrafficLight();
   mode=NORMAL_MODE;
-  setTimer(250,2);
+//  setTimer(250,2);
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -106,6 +107,7 @@ int main(void)
   while (1)
   {
 //	  fsm_mode_change();
+
 
 	  fsm_7seg_led();
 	  fsm_traffic_light();
