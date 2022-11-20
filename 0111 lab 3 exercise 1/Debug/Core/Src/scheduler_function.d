@@ -1,5 +1,5 @@
-Core/Src/fsm_traffic_light.o: ../Core/Src/fsm_traffic_light.c \
- ../Core/Inc/fsm_traffic_light.h ../Core/Inc/global.h \
+Core/Src/scheduler_function.o: ../Core/Src/scheduler_function.c \
+ ../Core/Inc/scheduler_function.h ../Core/Inc/global.h \
  ../Core/Inc/timerRun.h ../Core/Inc/main.h \
  ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal.h \
  ../Core/Inc/stm32f1xx_hal_conf.h \
@@ -25,11 +25,10 @@ Core/Src/fsm_traffic_light.o: ../Core/Src/fsm_traffic_light.c \
  ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_pwr.h \
  ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_tim.h \
  ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_tim_ex.h \
- ../Core/Inc/button.h ../Core/Inc/led7.h ../Core/Inc/fsm_mode_change.h \
- ../Core/Inc/fsm_7seg_led.h ../Core/Inc/fsm_traffic_light.h \
- ../Core/Inc/fsm_7seg_led.h
+ ../Core/Inc/button.h ../Core/Inc/led7.h ../Core/Inc/scheduler_function.h \
+ ../Core/Inc/watch_dog.h
 
-../Core/Inc/fsm_traffic_light.h:
+../Core/Inc/scheduler_function.h:
 
 ../Core/Inc/global.h:
 
@@ -89,10 +88,6 @@ Core/Src/fsm_traffic_light.o: ../Core/Src/fsm_traffic_light.c \
 
 ../Core/Inc/led7.h:
 
-../Core/Inc/fsm_mode_change.h:
+../Core/Inc/scheduler_function.h:
 
-../Core/Inc/fsm_7seg_led.h:
-
-../Core/Inc/fsm_traffic_light.h:
-
-../Core/Inc/fsm_7seg_led.h:
+../Core/Inc/watch_dog.h:

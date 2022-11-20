@@ -23,9 +23,6 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include "global.h"
-#include "fsm_7seg_led.h"
-#include "fsm_mode_change.h"
-#include "fsm_traffic_light.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -100,14 +97,10 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   void Led_Display()
   {
-	  HAL_GPIO_TogglePin(Led, Led_Pin);
-  }
-  void SCH_Add_Task(int *task, int, int duration)
-  {
-
+//	  HAL_GPIO_TogglePin(Led, Led_Pin);
   }
   // In it all the requirements for the system to run
-  	 System_Initialization() ;
+//  	 System_Initialization() ;
   // Initialize a schedule
   	 SCH_Init() ;
   //Add a task to repeatedly call in every 1 second .
