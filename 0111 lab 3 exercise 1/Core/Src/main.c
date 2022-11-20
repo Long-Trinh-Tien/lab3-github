@@ -93,22 +93,28 @@ int main(void)
   MX_GPIO_Init();
   /* USER CODE BEGIN 2 */
   HAL_TIM_Base_Start_IT(&htim2);
-  startAllButton();
-  startAllTimer();
-  OffAllLed();
-  offAllTrafficLight();
-  mode=NORMAL_MODE;
-  setTimer(250,2);
+
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
+  void Led_Display()
+  {
+	  HAL_GPIO_TogglePin(Led, Led_Pin);
+  }
+  void SCH_Add_Task(int *task, int, int duration)
+  {
 
+  }
+  // In it all the requirements for the system to run
+  	 System_Initialization() ;
+  // Initialize a schedule
+  	 SCH_Init() ;
+  //Add a task to repeatedly call in every 1 second .
+  	 SCH_Add_Task( Led_Display , 0 , 1000) ;
   while (1)
   {
-	  fsm_mode_change();
-	  fsm_7seg_led();
-	  fsm_traffic_light();
+	 SCH_Dispatch_Tasks () ;//execute led display
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
@@ -250,8 +256,7 @@ static void MX_GPIO_Init(void)
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim){
 	if(htim -> Instance == TIM2 )
 	{
-	timerRun();
-	getKeyInput();
+	SCH_Update();
 	}
 }
 /* USER CODE END 4 */
