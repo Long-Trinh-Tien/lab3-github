@@ -56,6 +56,14 @@ static void MX_GPIO_Init(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
+void Led_Display()
+{
+	  HAL_GPIO_TogglePin(RED_HOR_GPIO_Port, RED_HOR_Pin);
+}
+
+
+
+//	void (*test)(void) = Led_Display;
 
 /* USER CODE END 0 */
 
@@ -66,6 +74,12 @@ static void MX_GPIO_Init(void);
 int main(void)
 {
   /* USER CODE BEGIN 1 */
+	// In it all the requirements for the system to run
+	//  	 System_Initialization() ;
+	// Initialize a schedule
+		 SCH_Init() ;
+	//Add a task to repeatedly call in every 1 second .
+		SCH_Add_Task( Led_Display , 0 , 100) ;
 
   /* USER CODE END 1 */
 
@@ -95,19 +109,12 @@ int main(void)
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
-  void Led_Display()
-  {
-//	  HAL_GPIO_TogglePin(Led, Led_Pin);
-  }
-  // In it all the requirements for the system to run
-//  	 System_Initialization() ;
-  // Initialize a schedule
-  	 SCH_Init() ;
-  //Add a task to repeatedly call in every 1 second .
-  	 SCH_Add_Task( Led_Display , 0 , 1000) ;
+
   while (1)
   {
-	 SCH_Dispatch_Tasks () ;//execute led display
+	 SCH_Dispatch_Tasks() ;//execute led display
+//	  (*test)();
+//	 HAL_Delay(200);
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
@@ -249,7 +256,7 @@ static void MX_GPIO_Init(void)
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim){
 	if(htim -> Instance == TIM2 )
 	{
-	SCH_Update();
+		SCH_Update();
 	}
 }
 /* USER CODE END 4 */

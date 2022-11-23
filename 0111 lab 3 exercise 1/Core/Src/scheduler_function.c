@@ -50,7 +50,7 @@ for ( i = 0; i < SCH_MAX_TASKS; i ++)
 // Reset the global error variable
 // − SCH_Delete_Task () w ill generate an error code ,
 // ( because the task array i s empty)
-	Error_code_G = 0;
+//	Error_code_G = 0;
 //	Timer_init();
 //	Watchdog_init () ;
 }
@@ -63,7 +63,7 @@ unsigned char Index ;
 // NOTE: calculations are in *TICKS* ( not milliseconds )
 for ( Index = 0; Index < SCH_MAX_TASKS; Index++)
 	{
-// Check i f there i s a task at thi s location
+// Check i f there i s a task at this location
 	if (SCH_tasks_G[Index].pTask)//if pTask != 0 then run
 		{
 		if ( SCH_tasks_G[Index].Delay == 0)
@@ -120,7 +120,7 @@ unsigned char SCH_Add_Task( void (* pFunction)() , unsigned int DELAY, unsigned 
 void SCH_Dispatch_Tasks( void )
 {
 	unsigned char Index ;
-	// Dispatches ( runs ) the next task ( i f one i s ready )
+	// Dispatches ( runs ) the next task ( if one is ready )
 	for ( Index = 0; Index < SCH_MAX_TASKS; Index++) {
 		if (SCH_tasks_G[Index].RunMe > 0) {
 			(* SCH_tasks_G[Index].pTask) () ; // Run the task
@@ -153,10 +153,10 @@ unsigned char SCH_Delete_Task( const int TASK_INDEX) //tByte here
 			} else {
 				Return_code = RETURN_NORMAL;
 			}
-			SCH_tasks_G[TASK_INDEX ] . pTask = 0x0000 ;
-			SCH_tasks_G[TASK_INDEX ] . Delay = 0;
-			SCH_tasks_G[TASK_INDEX ] . Period = 0;
-			SCH_tasks_G[TASK_INDEX ] .RunMe = 0;
+			SCH_tasks_G[TASK_INDEX ].pTask = 0x0000 ;
+			SCH_tasks_G[TASK_INDEX ].Delay = 0;
+			SCH_tasks_G[TASK_INDEX ].Period = 0;
+			SCH_tasks_G[TASK_INDEX ].RunMe = 0;
 			return Return_code ; // return status
 }
 
