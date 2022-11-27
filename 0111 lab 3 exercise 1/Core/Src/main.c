@@ -311,10 +311,10 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim){
 		SCH_Update();
 	}
 
-	if(htim -> Instance == TIM3 )
-	{
-		HAL_GPIO_TogglePin(GREEN_HOR_GPIO_Port, GREEN_HOR_Pin);
-	}
+//	if(htim -> Instance == TIM3 )
+//	{
+//		HAL_GPIO_TogglePin(GREEN_HOR_GPIO_Port, GREEN_HOR_Pin);
+//	}
 }
 /* USER CODE END 4 */
 

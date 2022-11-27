@@ -34,9 +34,7 @@ typedef struct
 	uint32_t TaskID ;
 } sTask ;
 
-// MUST BE ADJUSTED FOR EACH NEW PROJECT
-#define SCH_MAX_TASKS 40
-#define NO_TASK_ID 0
+
 sTask SCH_tasks_G[SCH_MAX_TASKS];
 
 

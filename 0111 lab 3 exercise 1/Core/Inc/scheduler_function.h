@@ -9,6 +9,9 @@
 #define INC_SCHEDULER_FUNCTION_H_
 
 #include "global.h"
+// MUST BE ADJUSTED FOR EACH NEW PROJECT
+#define SCH_MAX_TASKS 40
+#define NO_TASK_ID 0
 
 void SCH_Init ( void );
 void SCH_Update( void ) ;
