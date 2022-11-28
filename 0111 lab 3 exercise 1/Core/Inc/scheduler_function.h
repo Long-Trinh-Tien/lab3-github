@@ -10,14 +10,16 @@
 
 #include "global.h"
 // MUST BE ADJUSTED FOR EACH NEW PROJECT
-#define SCH_MAX_TASKS 40
+#define SCH_MAX_TASKS 30
 #define NO_TASK_ID 0
+void testUnit();
+void testRunInMain();
 
 void SCH_Init ( void );
 void SCH_Update( void ) ;
 unsigned char SCH_Add_Task( void (* pFunction)() , unsigned int DELAY, unsigned int PERIOD);
 void SCH_Dispatch_Tasks( void );
-unsigned char SCH_Delete_Task( const int TASK_INDEX) ;
+void SCH_Delete_Task( const int TASK_INDEX) ;
 void SCH_Go_To_Sleep () ;
 void SCH_Report_Status ( void ) ;
 

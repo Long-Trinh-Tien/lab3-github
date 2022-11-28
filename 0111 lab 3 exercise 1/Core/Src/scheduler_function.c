@@ -36,7 +36,8 @@ typedef struct
 
 
 sTask SCH_tasks_G[SCH_MAX_TASKS];
-
+sTask tempTask;
+static int numOfTaskNow = 0;
 
 void SCH_Init ( void )
 {
@@ -53,34 +54,119 @@ for ( i = 0; i < SCH_MAX_TASKS; i ++)
 //	Watchdog_init () ;
 }
 
+//move everything to right
+void moveToRight(int startAt,int numOfTaskNow)
+{
+    for (int i = numOfTaskNow;i>=startAt;i--)
+    {
+        SCH_tasks_G[i+1]=SCH_tasks_G[i];
+    }
+}
 
+//correct delay after adding
+void correctDelay(sTask *taskInput, int numOfTaskNow)
+{
+    // nothing to compare
+    if(SCH_tasks_G[0].pTask==0)
+    {
+        SCH_tasks_G[0]=(*taskInput);
+        return;
+    }
+
+    //less than first element
+    if((*taskInput).Delay<=SCH_tasks_G[0].Delay)
+    {
+             tempTask=*taskInput;
+
+        //delete task to moveToRight
+        	(*taskInput).pTask = 0x0000 ;
+        	(*taskInput).Delay = 0;
+        	(*taskInput).Period = 0;
+        	(*taskInput).RunMe = 0;
+        moveToRight(0,numOfTaskNow);
+        SCH_tasks_G[0]=tempTask;
+        if(SCH_tasks_G[1].pTask!=0)
+        {
+            SCH_tasks_G[1].Delay =SCH_tasks_G[1].Delay- SCH_tasks_G[0].Delay;
+        }
+        return;
+    }
+
+    //more than everything
+    int sumEverything = 0;
+    for(int i=0;i<numOfTaskNow;i++)
+    {
+        if(SCH_tasks_G[i].pTask)
+        {
+            sumEverything = sumEverything + SCH_tasks_G[i].Delay;
+        }
+    }
+    if((*taskInput).Delay>=sumEverything)
+    {
+//        numOfTaskNow++;
+        SCH_tasks_G[numOfTaskNow]=(*taskInput);
+        return;
+    }
+
+    //new Delay must be between sum1 and sum2
+    int sum1=0;
+    int sum2=0;
+    for (int i=0; i<numOfTaskNow;i++)
+    {
+        //evaluate sum1 and sum2
+        if(i>0)
+        {
+            sum1 = sum1 + SCH_tasks_G[i-1].Delay;
+        } else {
+            sum1 = 0;
+        }
+        sum2 = sum2 + SCH_tasks_G[i].Delay;
+        if(SCH_tasks_G[i].pTask)
+        {
+        if(((*taskInput).Delay >= sum1)&&((*taskInput).Delay <= sum2))
+            {
+                tempTask=*taskInput;
+                //delete task to moveToRight
+                	(*taskInput).pTask = 0x0000 ;
+                	(*taskInput).Delay = 0;
+                	(*taskInput).Period = 0;
+                	(*taskInput).RunMe = 0;
+                moveToRight(i,numOfTaskNow);
+                SCH_tasks_G[i]=tempTask;
+                SCH_tasks_G[i].Delay = SCH_tasks_G[i].Delay - sum1;
+                if(SCH_tasks_G[i+1].pTask)
+                {
+                    SCH_tasks_G[i+1].Delay -= SCH_tasks_G[i].Delay;
+                }
+	return;
+            }
+        }
+    }
+}
 
 void SCH_Update( void )
 {
-unsigned char Index ;
-// NOTE: calculations are in *TICKS* ( not milliseconds )
-for ( Index = 0; Index < SCH_MAX_TASKS; Index++)
+	if((SCH_tasks_G[0].Delay>0)&&(SCH_tasks_G[0].RunMe == 0))
 	{
-// Check i f there i s a task at this location
-	if (SCH_tasks_G[Index].pTask)//if pTask != 0 then run
-		{
-		if ( SCH_tasks_G[Index].Delay == 0)
-			{
-				// The task is due to run
-				// Inc the ’RunMe’ flag
-				SCH_tasks_G[Index].RunMe += 1;//flag
-				if (SCH_tasks_G[Index].Period) //if Period != 0 then run
-					{
-						// Schedule periodic tasks to run again
-						SCH_tasks_G[Index].Delay = SCH_tasks_G[Index].Period ;
-					}
-			} else {
-						// Not yet ready to run : just decrement the delay
-						SCH_tasks_G[Index].Delay -=1;
-					}
-		}
+		SCH_tasks_G[0].Delay--;
 	}
+
+	if(SCH_tasks_G[0].Delay==0)
+	{
+		SCH_tasks_G[0].RunMe = 1;
+		//delete task and set run me = 0 in another function
+	}
+
 }
+
+void swap(sTask *a, sTask *b)
+{
+	sTask temp = *a;
+	*a = *b;
+	*b = temp;
+}
+
+
 
 
 /*−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−*−
@@ -95,68 +181,60 @@ unsigned char SCH_Add_Task( void (* pFunction)() , unsigned int DELAY, unsigned 
 	{
 		Index++;
 	}
-
-	// Have we reached the end of the list ?
-	if ( Index == SCH_MAX_TASKS)
-	{
-		// Task list is full
-		// Set the global error variable
-		Error_code_G = ERROR_SCH_TOO_MANY_TASKS;
-		// Also return an error code
-		return SCH_MAX_TASKS;
-	}
+	// let we know numOfTaskNow
+	numOfTaskNow++;
 	// If we're here , there is a space in the task array
 	SCH_tasks_G[Index].pTask = pFunction ;
 	SCH_tasks_G[Index].Delay = DELAY;
 	SCH_tasks_G[Index].Period = PERIOD;
 	SCH_tasks_G[Index].RunMe = 0;
+
+	//correctDelay here
+	correctDelay((&SCH_tasks_G[Index]),numOfTaskNow);
 	// return position of task ( to allow later deletion )
 	return Index ;
 }
 
 
-void SCH_Dispatch_Tasks( void )
+void SCH_Dispatch_Tasks(void)
 {
 	unsigned char Index ;
 	// Dispatches ( runs ) the next task ( if one is ready )
-	for ( Index = 0; Index < SCH_MAX_TASKS; Index++) {
-		if (SCH_tasks_G[Index].RunMe > 0) {
-			(* SCH_tasks_G[Index].pTask) () ; // Run the task
-			SCH_tasks_G[Index].RunMe -= 1; // Reset / reduce RunMe flag
+//	for ( Index = 0; Index < 1; Index++) {
+		if (SCH_tasks_G[0].RunMe > 0) {
+			(* SCH_tasks_G[0].pTask) () ; // Run the task
+			SCH_tasks_G[0].RunMe = 0; // Reset / reduce RunMe flag
 			// Periodic tasks w ill automatically run again
 			// − if this is a ’one shot ’ task , remove it from the array
-			if ( SCH_tasks_G[Index].Period == 0)
+			if ( SCH_tasks_G[0].Period == 0)
 			{
-				SCH_Delete_Task(Index) ;
+				SCH_Delete_Task(0);
 			}
+			if((SCH_tasks_G[0].Period>0)&&(SCH_tasks_G[0].Delay==0))
+    		{
+                tempTask=SCH_tasks_G[0];
+                SCH_Delete_Task(0);
+                SCH_Add_Task(tempTask.pTask,tempTask.Period,tempTask.Period);
+    		}
+
 		}
-	}
-	// Report system status
-	SCH_Report_Status () ;
-	// The scheduler enters idle mode at thi s point
-	SCH_Go_To_Sleep() ;
+//	}
 }
 
-/*−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−*/
-unsigned char SCH_Delete_Task( const int TASK_INDEX) //tByte here
+
+void SCH_Delete_Task( const int TASK_INDEX) //tByte here
 {
-	unsigned char Return_code ;
-		if ( SCH_tasks_G[TASK_INDEX ] . pTask == 0) {
-			// No task at thi s location . . .
-			//
-			// Set the global error variable
-			Error_code_G = ERROR_SCH_CANNOT_DELETE_TASK;
-			// . . . also return an error code
-			Return_code = RETURN_ERROR;
-			} else {
-				Return_code = RETURN_NORMAL;
-			}
-			SCH_tasks_G[TASK_INDEX ].pTask = 0x0000 ;
-			SCH_tasks_G[TASK_INDEX ].Delay = 0;
-			SCH_tasks_G[TASK_INDEX ].Period = 0;
-			SCH_tasks_G[TASK_INDEX ].RunMe = 0;
-			return Return_code ; // return status
+    for (int i = TASK_INDEX;i<(numOfTaskNow);i++)
+    {
+        SCH_tasks_G[i]=SCH_tasks_G[i+1];
+    }
+    	SCH_tasks_G[numOfTaskNow].pTask = 0x0000 ;
+    	SCH_tasks_G[numOfTaskNow].Delay = 0;
+    	SCH_tasks_G[numOfTaskNow].Period = 0;
+    	SCH_tasks_G[numOfTaskNow].RunMe = 0;
+    	numOfTaskNow--;
 }
+
 
 
 void SCH_Go_To_Sleep ()

@@ -63,6 +63,16 @@ void Led_Display()
 	  HAL_GPIO_TogglePin(RED_HOR_GPIO_Port, RED_HOR_Pin);
 }
 
+void Led2_Display()
+{
+	 HAL_GPIO_TogglePin(YELLOW_HOR_GPIO_Port, YELLOW_HOR_Pin);
+}
+
+void Led3_Display()
+{
+	 HAL_GPIO_TogglePin(GREEN_HOR_GPIO_Port,GREEN_HOR_Pin);
+}
+
 
 
 //	void (*test)(void) = Led_Display;
@@ -81,9 +91,9 @@ int main(void)
 	// In it all the requirements for the system to run
 	//  	 System_Initialization() ;
 	// Initialize a schedule
-		 SCH_Init() ;
+//		 SCH_Init() ;
 	//Add a task to repeatedly call in every 1 second .
-		SCH_Add_Task( Led_Display , 50 , 50) ;
+//		SCH_Add_Task( Led_Display , 50 , 50) ;
 
   /* USER CODE END 1 */
 
@@ -115,12 +125,16 @@ int main(void)
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
+  SCH_Add_Task(Led_Display, 50, 51);
+  SCH_Add_Task(Led2_Display, 100, 0);
+  SCH_Add_Task(Led3_Display, 150, 0);
+
+
 
   while (1)
   {
 	 SCH_Dispatch_Tasks() ;//execute led display
-//	  (*test)();
-//	 HAL_Delay(200);
+
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
