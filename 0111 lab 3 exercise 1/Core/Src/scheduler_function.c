@@ -104,7 +104,8 @@ void correctDelay(sTask *taskInput, int numOfTaskNow)
     if((*taskInput).Delay>=sumEverything)
     {
 //        numOfTaskNow++;
-        SCH_tasks_G[numOfTaskNow]=(*taskInput);
+//        SCH_tasks_G[numOfTaskNow]=(*taskInput);
+        SCH_tasks_G[numOfTaskNow].Delay -= sumEverything;
         return;
     }
 
