@@ -59,7 +59,7 @@ static void MX_USART2_UART_Init(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-uint8_t temp = 12;
+uint8_t temp = 0;
 
 void HAL_UART_RxCpltCallback ( UART_HandleTypeDef * huart )
 {
@@ -104,16 +104,18 @@ int main(void)
   MX_USART2_UART_Init();
   /* USER CODE BEGIN 2 */
   HAL_UART_Receive_IT (&huart2 ,&temp , 1);
+  HAL_ADC_Start(&hadc1);
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   uint32_t ADC_value = 0;
+  char str[80];
   while (1)
   {
 	 HAL_GPIO_TogglePin (LED_RED_GPIO_Port,LED_RED_Pin);
 	 ADC_value = HAL_ADC_GetValue (&hadc1);
-	 HAL_UART_Transmit(&huart2,&ADC_value,20,1000);
+	 HAL_UART_Transmit(&huart2,(void*)str ,sprintf (str,"%d \n",ADC_value),1000);
 //	 (void*)str ,sprintf (str,"%d\n",ADC_value)
 	 HAL_Delay(500);
     /* USER CODE END WHILE */
@@ -226,7 +228,7 @@ static void MX_USART2_UART_Init(void)
 
   /* USER CODE END USART2_Init 1 */
   huart2.Instance = USART2;
-  huart2.Init.BaudRate = 115200;
+  huart2.Init.BaudRate = 9600;
   huart2.Init.WordLength = UART_WORDLENGTH_8B;
   huart2.Init.StopBits = UART_STOPBITS_1;
   huart2.Init.Parity = UART_PARITY_NONE;
