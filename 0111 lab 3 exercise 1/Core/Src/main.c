@@ -125,9 +125,9 @@ int main(void)
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
-  SCH_Add_Task(Led_Display, 50, 51);
-  SCH_Add_Task(Led2_Display, 100, 0);
-  SCH_Add_Task(Led3_Display, 150, 0);
+  SCH_Add_Task(Led_Display, 50, 50);//red
+  SCH_Add_Task(Led2_Display, 100, 0);//yellow
+  SCH_Add_Task(Led3_Display, 150, 0);//green
 
 
 
