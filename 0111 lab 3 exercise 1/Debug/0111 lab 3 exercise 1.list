@@ -170,17 +170,17 @@ int main(void)
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
-  SCH_Add_Task(Led_Display, 50, 50);
+  SCH_Add_Task(Led_Display, 50, 50);//red
  80001ac:	2232      	movs	r2, #50	; 0x32
  80001ae:	2132      	movs	r1, #50	; 0x32
  80001b0:	4809      	ldr	r0, [pc, #36]	; (80001d8 <main+0x50>)
  80001b2:	f000 fadd 	bl	8000770 <SCH_Add_Task>
-  SCH_Add_Task(Led2_Display, 100, 0);
+  SCH_Add_Task(Led2_Display, 100, 0);//yellow
  80001b6:	2200      	movs	r2, #0
  80001b8:	2164      	movs	r1, #100	; 0x64
  80001ba:	4808      	ldr	r0, [pc, #32]	; (80001dc <main+0x54>)
  80001bc:	f000 fad8 	bl	8000770 <SCH_Add_Task>
-  SCH_Add_Task(Led3_Display, 150, 0);
+  SCH_Add_Task(Led3_Display, 150, 0);//green
  80001c0:	2200      	movs	r2, #0
  80001c2:	2196      	movs	r1, #150	; 0x96
  80001c4:	4806      	ldr	r0, [pc, #24]	; (80001e0 <main+0x58>)
