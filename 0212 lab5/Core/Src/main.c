@@ -63,15 +63,6 @@ static void MX_TIM2_Init(void);
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
 
-//void HAL_UART_RxCpltCallback ( UART_HandleTypeDef * huart )
-//{
-//
-//	if(huart -> Instance == USART2 )
-//	{
-//		HAL_UART_Transmit (& huart2 , &temp , 1, 50) ;
-//		HAL_UART_Receive_IT (& huart2 , &temp , 1);
-//	}
-//}
 /* USER CODE END 0 */
 
 /**
@@ -128,6 +119,7 @@ int main(void)
 //		  HAL_GPIO_TogglePin (LED_RED_GPIO_Port,LED_RED_Pin);
 		  buffer_flag = 0;
 	  }
+	  uart_communiation_fsm();
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
@@ -328,7 +320,6 @@ static void MX_GPIO_Init(void)
 //uint8_t temp = 0;
 uint8_t buffer [ MAX_BUFFER_SIZE ];
 uint8_t index_buffer = 0;
-uint32_t ADC_value = 0;
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 {
 	timerRun();
