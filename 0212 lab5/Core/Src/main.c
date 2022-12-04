@@ -110,13 +110,12 @@ int main(void)
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   uint32_t ADC_value = 0;
-  char str[80];
+  char str[10];
   while (1)
   {
 	 HAL_GPIO_TogglePin (LED_RED_GPIO_Port,LED_RED_Pin);
 	 ADC_value = HAL_ADC_GetValue (&hadc1);
-	 HAL_UART_Transmit(&huart2,(void*)str ,sprintf (str,"%d \n",ADC_value),1000);
-//	 (void*)str ,sprintf (str,"%d\n",ADC_value)
+	 HAL_UART_Transmit(&huart2,(void*)str ,sprintf (str,"!ADC = %d# \n",ADC_value),1000);
 	 HAL_Delay(500);
     /* USER CODE END WHILE */
 
